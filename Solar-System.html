@@ -19,7 +19,7 @@
 
     <script>
 
-        var camera, scene, renderer, sphereMesh, planeMesh, coneMesh, cylinderMesh;
+        var camera, scene, renderer;
         //declare all the Meshes you will use (plane , sphere , Box ,cone ,cylinder )
 
 
@@ -48,46 +48,91 @@
             mercury = new THREE.Mesh(geometry, material);
             scene.add(mercury);
 
+            var mercuryTgeometry = new THREE.TorusGeometry( 35, 0.5, 30, 200, 6.3);
+            var mercuryTmaterial = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+            mercurytorus = new THREE.Mesh( mercuryTgeometry, mercuryTmaterial );
+            scene.add( mercurytorus );
+            
             var geometry = new THREE.SphereGeometry(8, 32, 32);
             var material = new THREE.MeshBasicMaterial({ color: 0xe9a2f0 });
             venus = new THREE.Mesh(geometry, material);
             scene.add(venus);
+
+            var venusTgeometry = new THREE.TorusGeometry( 60, 0.5, 30, 200, 6.3);
+            var venusTmaterial = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+            venustorus = new THREE.Mesh( venusTgeometry, venusTmaterial );
+            scene.add( venustorus );
             
             var geometry = new THREE.SphereGeometry(8, 32, 32);
             var material = new THREE.MeshBasicMaterial({ color: 0x15c38a });
             earth = new THREE.Mesh(geometry, material);
             scene.add(earth);
 
+            var earthTgeometry = new THREE.TorusGeometry( 90, 0.5, 30, 200, 6.3);
+            var earthTmaterial = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+            earthtorus = new THREE.Mesh( earthTgeometry, earthTmaterial );
+            scene.add( earthtorus );
+
             var geometry = new THREE.SphereGeometry(4, 32, 32);
             var material = new THREE.MeshBasicMaterial({ color: 0xa8b3ee });
             mars = new THREE.Mesh(geometry, material);
             scene.add(mars);
+
+            var marsTgeometry = new THREE.TorusGeometry( 115, 0.5, 30, 200, 6.3);
+            var marsTmaterial = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+            marstorus = new THREE.Mesh( marsTgeometry, marsTmaterial );
+            scene.add( marstorus );
 
             var geometry = new THREE.SphereGeometry(13, 32, 32);
             var material = new THREE.MeshBasicMaterial({ color: 0xb4a9c2 });
             jupiter = new THREE.Mesh(geometry, material);
             scene.add(jupiter);
 
+            var jupiterTgeometry = new THREE.TorusGeometry( 145, 0.5, 30, 200, 6.3);
+            var jupiterTmaterial = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+            jupitertorus = new THREE.Mesh( jupiterTgeometry, jupiterTmaterial );
+            scene.add( jupitertorus );
+
             var geometry = new THREE.SphereGeometry(11, 32, 32);
             var material = new THREE.MeshBasicMaterial({ color: 0x1c2c3b });
             saturn = new THREE.Mesh(geometry, material);
             scene.add(saturn);
+
+            var saturnTgeometry = new THREE.TorusGeometry( 185, 0.5, 30, 200, 6.3);
+            var saturnTmaterial = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+            saturntorus = new THREE.Mesh( saturnTgeometry, saturnTmaterial );
+            scene.add( saturntorus );
 
             var geometry = new THREE.SphereGeometry(7, 32, 32);
             var material = new THREE.MeshBasicMaterial({ color: 0x15c38e });
             uranus = new THREE.Mesh(geometry, material);
             scene.add(uranus);
 
+            var uranusTgeometry = new THREE.TorusGeometry( 217, 0.5, 30, 200, 6.3);
+            var uranusTmaterial = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+            uranustorus = new THREE.Mesh( uranusTgeometry, uranusTmaterial );
+            scene.add( uranustorus );
+
             var geometry = new THREE.SphereGeometry(10, 32, 32);
             var material = new THREE.MeshBasicMaterial({ color: 0x132552 });
             neptune = new THREE.Mesh(geometry, material);
             scene.add(neptune);
 
+            var neptuneTgeometry = new THREE.TorusGeometry( 246, 0.5, 30, 200, 6.3);
+            var neptuneTmaterial = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+            neptunetorus = new THREE.Mesh( neptuneTgeometry, neptuneTmaterial );
+            scene.add(neptunetorus);
+
             var geometry = new THREE.SphereGeometry(3, 32, 32);
             var material = new THREE.MeshBasicMaterial({ color: 0xabcdef });
             pluto = new THREE.Mesh(geometry, material);
             scene.add(pluto);
-            
+
+            var plutoTgeometry = new THREE.TorusGeometry( 271, 0.5, 30, 200, 6.3);
+            var plutoTmaterial = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+            plutotorus = new THREE.Mesh( plutoTgeometry, plutoTmaterial );
+            scene.add(plutotorus);
+
             renderer = new THREE.WebGLRenderer();
             renderer.setPixelRatio(window.devicePixelRatio);
             renderer.setSize(window.innerWidth, window.innerHeight);
