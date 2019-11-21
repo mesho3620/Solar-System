@@ -1,4 +1,4 @@
-<html lang="en">
+﻿<html lang="en">
 <head>
     <title>three.js webgl - geometry - cube</title>
     <meta charset="utf-8">
@@ -21,7 +21,21 @@
 
         var camera, scene, renderer;
         //declare all the Meshes you will use (plane , sphere , Box ,cone ,cylinder )
+        var rotateZ = new THREE.Matrix4();
+                                                                              
+           /*            way2                                                            
+                                  //  SUN    , Mercury ,  Venus  ,  Earth  ,   Mars  , Jupiter , Saturn  ,  Uranus , Neptune ,  Pluto  
+        var planetsColorArray     = [0xffff00, 0x1f5fd6, 0xe9a2f0, 0x15c38a, 0xa8b3ee, 0xb4a9c2, 0x1c2c3b, 0x15c38e, 0x132552, 0xabcdef];
+        var planetsRadiusArray    = [   20   ,     5   ,     8   ,     8   ,    4    ,   13    ,     11  ,     7   ,    10   ,     3   ];
+        var planetsPositionXArray = [    0   ,    35   ,    60   ,    90   ,  115    ,  145    ,    185  ,   217   ,   246   ,   271   ];
+        var planetsSpeedArray     = [           0.172  ,  0.126  ,  0.107  , 0.086   , 0.047   ,   0.034 ,  0.024  ,  0.019  ,  0.017  ];
+        var planetGeometry;
+        var planetMaterial;
+        var orbitGeometry;
+        var orbitMaterial;
+        var planets = [];
 
+        //  way2 */
 
         init();
         animate();
@@ -38,6 +52,9 @@
             //change each Mesh's position so they all will be on the plane (MUST)
             //then don't forget to add it to the scene
 
+
+                                                                             //   /*    //way 1
+
             var geometry = new THREE.SphereGeometry(20, 32, 32);
             var material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
             sun = new THREE.Mesh(geometry, material);
@@ -46,6 +63,7 @@
             var geometry = new THREE.SphereGeometry(5, 32, 32);
             var material = new THREE.MeshBasicMaterial({ color: 0x1f5fd6 });
             mercury = new THREE.Mesh(geometry, material);
+            mercury.position.x = 35;
             scene.add(mercury);
 
             var mercuryTgeometry = new THREE.TorusGeometry( 35, 0.5, 30, 200, 6.3);
@@ -56,6 +74,7 @@
             var geometry = new THREE.SphereGeometry(8, 32, 32);
             var material = new THREE.MeshBasicMaterial({ color: 0xe9a2f0 });
             venus = new THREE.Mesh(geometry, material);
+            venus.position.x = 60;
             scene.add(venus);
 
             var venusTgeometry = new THREE.TorusGeometry( 60, 0.5, 30, 200, 6.3);
@@ -66,6 +85,7 @@
             var geometry = new THREE.SphereGeometry(8, 32, 32);
             var material = new THREE.MeshBasicMaterial({ color: 0x15c38a });
             earth = new THREE.Mesh(geometry, material);
+            earth.position.x = 90;
             scene.add(earth);
 
             var earthTgeometry = new THREE.TorusGeometry( 90, 0.5, 30, 200, 6.3);
@@ -76,6 +96,7 @@
             var geometry = new THREE.SphereGeometry(4, 32, 32);
             var material = new THREE.MeshBasicMaterial({ color: 0xa8b3ee });
             mars = new THREE.Mesh(geometry, material);
+            mars.position.x = 115;
             scene.add(mars);
 
             var marsTgeometry = new THREE.TorusGeometry( 115, 0.5, 30, 200, 6.3);
@@ -86,6 +107,7 @@
             var geometry = new THREE.SphereGeometry(13, 32, 32);
             var material = new THREE.MeshBasicMaterial({ color: 0xb4a9c2 });
             jupiter = new THREE.Mesh(geometry, material);
+            jupiter.position.x = 145;
             scene.add(jupiter);
 
             var jupiterTgeometry = new THREE.TorusGeometry( 145, 0.5, 30, 200, 6.3);
@@ -96,6 +118,7 @@
             var geometry = new THREE.SphereGeometry(11, 32, 32);
             var material = new THREE.MeshBasicMaterial({ color: 0x1c2c3b });
             saturn = new THREE.Mesh(geometry, material);
+            saturn.position.x = 185;
             scene.add(saturn);
 
             var saturnTgeometry = new THREE.TorusGeometry( 185, 0.5, 30, 200, 6.3);
@@ -106,6 +129,7 @@
             var geometry = new THREE.SphereGeometry(7, 32, 32);
             var material = new THREE.MeshBasicMaterial({ color: 0x15c38e });
             uranus = new THREE.Mesh(geometry, material);
+            uranus.position.x = 217;
             scene.add(uranus);
 
             var uranusTgeometry = new THREE.TorusGeometry( 217, 0.5, 30, 200, 6.3);
@@ -116,6 +140,7 @@
             var geometry = new THREE.SphereGeometry(10, 32, 32);
             var material = new THREE.MeshBasicMaterial({ color: 0x132552 });
             neptune = new THREE.Mesh(geometry, material);
+            neptune.position.x = 246;
             scene.add(neptune);
 
             var neptuneTgeometry = new THREE.TorusGeometry( 246, 0.5, 30, 200, 6.3);
@@ -126,12 +151,42 @@
             var geometry = new THREE.SphereGeometry(3, 32, 32);
             var material = new THREE.MeshBasicMaterial({ color: 0xabcdef });
             pluto = new THREE.Mesh(geometry, material);
-            scene.add(pluto);
+            pluto.position.x = 271;
+             scene.add(pluto);
 
             var plutoTgeometry = new THREE.TorusGeometry( 271, 0.5, 30, 200, 6.3);
             var plutoTmaterial = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
             plutotorus = new THREE.Mesh( plutoTgeometry, plutoTmaterial );
             scene.add(plutotorus);
+
+                                                                       //         */ //way 1
+
+                                                                               /*  way 2
+
+                for (let i = 0; i < planetsColorArray.length; i++)
+            {
+
+                planetGeometry = new THREE.SphereGeometry(planetsRadiusArray[i], 32, 32);
+                planetMaterial = new THREE.MeshBasicMaterial({ color: planetsColorArray[i] });
+                planets[i] = new THREE.Mesh(planetGeometry, planetMaterial);
+                planets[i].position.x = planetsPositionXArray[i];
+                
+                if (i > 0)
+                {
+
+                    orbitGeometry = new THREE.TorusGeometry(planetsPositionXArray[i], 0.5, 30, 200, 6.3);
+                    orbitMaterial = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+                    orbits = new THREE.Mesh(orbitGeometry, orbitMaterial);
+                    scene.add(orbits);
+
+                }
+
+                scene.add(planets[i]);
+                
+
+            }
+
+                                                                        //  way2*/                                                            
 
             renderer = new THREE.WebGLRenderer();
             renderer.setPixelRatio(window.devicePixelRatio);
@@ -144,23 +199,53 @@
             renderer.render(scene, camera);
             //Here you can make any animation for any mesh
 
-            mercury.position.x = 35;
+            
+                                                                        /*  way 2
 
-            venus.position.x = 60;
 
-            earth.position.x = 90;
+            for (let i = 1; i < planetsColorArray.length; i++)
+            {
 
-            mars.position.x = 115;
+                rotateZ.makeRotationZ(planetsSpeedArray[i-1]/3);
+                planets[i].position.applyMatrix4(rotateZ);
+                
 
-            jupiter.position.x = 145;
+            }
 
-            saturn.position.x = 185;
+                                                                    //   way2  */
 
-            uranus.position.x = 217;
+                                                            //        /*   way 1
 
-            neptune.position.x = 246;
+            rotateZ.makeRotationZ(0.172 / 3);
+            mercury.position.applyMatrix4(rotateZ);
 
-            pluto.position.x = 271;
+            rotateZ.makeRotationZ(0.126 / 3);
+            venus.position.applyMatrix4(rotateZ);
+
+            rotateZ.makeRotationZ(0.107 / 3);
+            earth.position.applyMatrix4(rotateZ);
+
+            rotateZ.makeRotationZ(0.086 / 3);
+            mars.position.applyMatrix4(rotateZ);
+
+            rotateZ.makeRotationZ(0.047 / 3);
+            jupiter.position.applyMatrix4(rotateZ);
+
+            rotateZ.makeRotationZ(0.034 / 3);
+            saturn.position.applyMatrix4(rotateZ);
+
+            rotateZ.makeRotationZ(0.024 / 3);
+            uranus.position.applyMatrix4(rotateZ);
+
+            rotateZ.makeRotationZ(0.019 / 3);
+            neptune.position.applyMatrix4(rotateZ);
+
+            rotateZ.makeRotationZ(0.017 / 3);
+            pluto.position.applyMatrix4(rotateZ);
+        
+
+                                                                        //  way1  */
+            
 
             requestAnimationFrame(animate);
 
