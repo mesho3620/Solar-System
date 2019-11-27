@@ -1,6 +1,6 @@
 ﻿<html lang="en">
 <head>
-    <title>three.js webgl - geometry - cube</title>
+    <title>Solar System</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <style>
@@ -62,7 +62,7 @@
                 {
 
                     planets[i].position.x = planetsPositionXArray[i] + planetsRadiusArray[0];
-                    orbitGeometry = new THREE.TorusGeometry(planetsPositionXArray[i] + planetsRadiusArray[0], 0.3, 30, 200, 6.3);
+                    orbitGeometry = new THREE.TorusGeometry(planets[i].position.x, 0.3, 30, 200, 6.3);
                     orbitMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
                     orbits = new THREE.Mesh(orbitGeometry, orbitMaterial);
                     scene.add(orbits);
@@ -93,6 +93,7 @@
         function animate() {
             renderer.render(scene, camera);
 
+
             for (let i = 1; i < planetsColorArray.length; i++)                      //Rotate the planets around the Sun(origin)
             {
 
@@ -101,8 +102,11 @@
                 planets[i].rotation.x += 0.1;
                 if (i == 6)
                 {
-                    saturnOrbit.position.applyMatrix4(rotateZ);
-                   // saturnOrbit.rotation.y += 0.01;
+                    saturnOrbit.position.x = planets[i].position.x;
+                    saturnOrbit.position.y = planets[i].position.y;
+                    saturnOrbit.position.z = planets[i].position.z;
+
+                    saturnOrbit.rotation.y += 0.1;
                 }
 
                 
@@ -140,6 +144,24 @@
                 Stargeometry.vertices.push(starVertex);
 
             }
+            var starsGeometry = new THREE.Geometry();
+
+            //for (var i = 0; i < 40000; i++) {
+
+            //    var star = new THREE.Vector3();
+            //    star.x = THREE.Math.randFloatSpread(2000);
+            //    star.y = THREE.Math.randFloatSpread(2000);
+            //    star.z = THREE.Math.randFloatSpread(2000);
+
+            //    starsGeometry.vertices.push(star);
+
+            //}
+
+            //var starsMaterial = new THREE.PointsMaterial({ color: 0x888888 });
+
+            //var starField = new THREE.Points(starsGeometry, starsMaterial);
+
+            //scene.add(starField);
 
 
             var stars = new THREE.PointCloud(Stargeometry, starStuff);
