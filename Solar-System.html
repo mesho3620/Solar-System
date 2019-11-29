@@ -118,32 +118,7 @@
         }
 
         function starForge() {
-            ///* 	Yep, it's a Star Wars: Knights of the Old Republic reference,
-            //    are you really surprised at this point? 
-            //                                            */
-            //var starQty = 45000;
-            //var Stargeometry = new THREE.SphereGeometry(1000, 100, 50);
-
-            //var materialOptions = {
-            //    size: 1.0, //I know this is the default, it's for you.  Play with it if you want.
-            //    transparency: true,
-            //    opacity: 0.7
-            //};
-
-            //var starStuff = new THREE.PointCloudMaterial(materialOptions);
-
-            //// The wizard gaze became stern, his jaw set, he creates the cosmos with a wave of his arms
-
-            //for (var i = 0; i < starQty; i++) {
-
-            //    var starVertex = new THREE.Vector3();
-            //    starVertex.x = Math.random() * 2000 - 1000;
-            //    starVertex.y = Math.random() * 2000 - 1000;
-            //    starVertex.z = Math.random() * 2000 - 1000;
-
-            //    Stargeometry.vertices.push(starVertex);
-
-            //}
+            
             var starsGeometry = new THREE.Geometry();
 
             for (var i = 0; i < 40000; i++) {
@@ -163,9 +138,6 @@
 
             scene.add(starField);
 
-
-            //var stars = new THREE.PointCloud(Stargeometry, starStuff);
-            //scene.add(stars);
         }
 
     </script>
