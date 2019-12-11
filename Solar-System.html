@@ -21,6 +21,15 @@
     <script>
 
         var camera, scene, renderer;
+
+//         <style>
+//     scene 
+//     {
+//          var sceneTexture = new THREE.TextureLoader().load("milkywat.jpg");
+//          var sceneMaterial = new THREE.MeshBasicMaterial({map:texture});
+//          sceneT = new THREE.Mesh(sceneTexture,sceneMaterial);
+//     }
+// </style>
         //declare all the Meshes you will use (plane , sphere , Box ,cone ,cylinder )
         var rotateZ = new THREE.Matrix4();
                                                                               
@@ -36,6 +45,11 @@
         var planets = [];
         var saturnOrbit,saturnGeormetry,saturnMaterial;
 
+        var sceneT;
+
+        var images              =["sun.jpg" , "mercury.jpg" , "venus.jpg" , "earth.jpg" , "mars.jpg" , "jupiter.jpg" , "saturn.jpg" 
+                                 , "uranus.jpg" , "neptune.jpg" , "pluto.jpg"];
+
         init();
         animate();
 
@@ -45,19 +59,40 @@
             camera.position.z = 500;
             var control = new THREE.OrbitControls(camera);
 
+            // scene 
+            // {
+               
+   
+            //          var sceneTexture = new THREE.TextureLoader().load("milkyway.jpg");
+            //          var sceneMaterial = new THREE.MeshBasicMaterial({map:texture});
+            //          sceneT = new THREE.Mesh(sceneTexture,sceneMaterial);
+            //         //scene.add(sceneT);
+                    
+            // }
+
+                const loader = new THREE.TextureLoader();
+                const bgTexture = loader.load('milkyway.jpg');
+                scene.background = bgTexture;
             starForge();
   
-
-                for (let i = 0; i < planetsColorArray.length; i++)          //Draw Planets
+                    // var sceneTexture = new THREE.TextureLoader().load("milkywat.jpg");
+                    // var sceneMaterial = new THREE.MeshBasicMaterial({map:texture});
+                    // sceneT = new THREE.Mesh(sceneTexture,sceneMaterial);
+            
+                for (let i = 0; i < images.length; i++)          //Draw Planets
             {
-
                 planetGeometry = new THREE.SphereGeometry(planetsRadiusArray[i], 32, 32);
-                planetMaterial = new THREE.MeshBasicMaterial({ color: planetsColorArray[i] });
-                planets[i] = new THREE.Mesh(planetGeometry, planetMaterial);
+                var texture = new THREE.TextureLoader().load(images[i]);
+                var material = new THREE.MeshBasicMaterial({map:texture});
+                planets[i] = new THREE.Mesh(planetGeometry, material);
 
+                scene.add(planets[i]);
+                
+                // planetMaterial = new THREE.MeshBasicMaterial({ color: planetsColorArray[i] });
+
+               
               
-                
-                
+              
                 if (i > 0 )                                                 //Draw orbits
                 {
 
@@ -74,19 +109,29 @@
                 if (i == 6)                                                                 //Draw Saturns Orbit
                 {
                     saturnGeormetry = new THREE.TorusGeometry(planetsRadiusArray[i] + 5, 4.5, 2, 125, 6.3);
-                    saturnMaterial = new THREE.MeshBasicMaterial({ color: 0x00ffff });
-                    saturnOrbit = new THREE.Mesh(saturnGeormetry, saturnMaterial);
+                    var textureSaturn = new THREE.TextureLoader().load("saturn_ring.png");
+                    var materialSaturn = new THREE.MeshBasicMaterial({map:texture}); 
+                    //saturnMaterial = new THREE.MeshBasicMaterial({ color: 0x00ffff });
+                    saturnOrbit = new THREE.Mesh(saturnGeormetry, materialSaturn);
                     saturnOrbit.position.x = planetsPositionXArray[i] + planetsRadiusArray[0];
                     scene.add(saturnOrbit);
 
+
+                //     var texture = new THREE.TextureLoader().load(images[i]);
+                // var material = new THREE.MeshBasicMaterial({map:texture});
+                // planets[i] = new THREE.Mesh(planetGeometry, material);
+
                 }
 
+              
             }
 
             renderer = new THREE.WebGLRenderer();
             renderer.setPixelRatio(window.devicePixelRatio);
             renderer.setSize(window.innerWidth, window.innerHeight);
             document.body.appendChild(renderer.domElement);
+
+
         }
 
 
