@@ -33,13 +33,20 @@
         var planetsSpeedArray     = [           0.172  ,  0.126  ,  0.107  , 0.086   , 0.047   ,   0.034 ,  0.024  ,  0.019  ,  0.017  ];
         var planetTexture         = ["sun.jpg", "mercury.jpg", "venus.jpg", "earth.jpg", "mars.jpg", "jupiter.jpg", "saturn.jpg"
                                      , "uranus.jpg", "neptune.jpg", "pluto.jpg"];
+        var planetSwitch          = [            true  ,   true  ,   true  ,   true  ,   true  ,   true  ,   true  ,   true  ,   true  ];
         var Texture;
         var planetGeometry;
         var planetMaterial;
         var orbitGeometry;
         var orbitMaterial;
         var planets = [];
-        var saturnOrbit,saturnGeormetry,saturnMaterial;
+        var saturnOrbit, saturnGeormetry, saturnMaterial;
+        var cameraX = 0; cameraY = 0; cameraZ = 600;
+        var cameraTrigger = false;
+        var cameraRotation = [0.1, 0.1, 0.1];
+        var cameraRadius = 600; 
+        var orbitsArray = [];
+        var daySpeed = 0.1;
 
         init();
         animate();
@@ -47,64 +54,63 @@
         function init() {
             scene = new THREE.Scene();
             camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 1500);
-            camera.position.z = 600;
+            camera.position.z = cameraZ;
             var control = new THREE.OrbitControls(camera);
-                                                                    //Background
+                                                                                        //Background
             const loader = new THREE.TextureLoader();
             const bgTexture = loader.load('Texture/milkyway.jpg');
             scene.background = bgTexture;
 
             starForge();
-  
-            
 
-                                                                              //light
+
+
+            //light
             var light = new THREE.PointLight(0xffffff, 1, 1000);
             light.intensity = 2;
             scene.add(light);
 
-                for (let i = 0; i < planetsColorArray.length; i++)          //Draw Planets
-               {
+            for (let i = 0; i < planetsColorArray.length; i++)          //Draw Planets
+            {
 
-                    planetGeometry = new THREE.SphereGeometry(planetsRadiusArray[i] * 1.25, 32, 32);
-                    Texture = new THREE.TextureLoader().load('Texture/'+planetTexture[i]);
+                planetGeometry = new THREE.SphereGeometry(planetsRadiusArray[i] * 1.25, 32, 32);
+                Texture = new THREE.TextureLoader().load('Texture/' + planetTexture[i]);
 
 
-                    if (i == 0)
-                    {
+                if (i == 0) {
 
-                        planetGeometry = new THREE.SphereGeometry(planetsRadiusArray[i], 32, 32);
-                        planetMaterial = new THREE.MeshBasicMaterial({ map: Texture });
+                    planetGeometry = new THREE.SphereGeometry(planetsRadiusArray[i], 32, 32);
+                    planetMaterial = new THREE.MeshBasicMaterial({ map: Texture });
 
-                    }
-                    else
-                    {
+                }
+                else {
 
-                        planetMaterial = new THREE.MeshPhongMaterial({ map: Texture });
+                    planetMaterial = new THREE.MeshPhongMaterial({ map: Texture });
 
-                    }
+                }
 
 
                 planets[i] = new THREE.Mesh(planetGeometry, planetMaterial);
 
-                if (i > 0 )                                                 //Draw orbits
+                if (i > 0)                                                 //Draw orbits
                 {
 
                     planets[i].position.x = planetsPositionXArray[i] + planetsRadiusArray[0];
                     orbitGeometry = new THREE.TorusGeometry(planets[i].position.x, 0.5, 50, 200, 6.3);
                     orbitMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
-                    orbits = new THREE.Mesh(orbitGeometry, orbitMaterial);
-                    orbits.rotation.x = 1.5708;
-                    scene.add(orbits);
+                    orbitsArray[i-1] = new THREE.Mesh(orbitGeometry, orbitMaterial);
+                    orbitsArray[i-1].rotation.x = 1.5708;
+                    
+                    scene.add(orbitsArray[i-1]);
 
                 }
 
                 scene.add(planets[i]);
-                
+
                 if (i == 6)                                                                 //Draw Saturns Orbit
                 {
                     saturnGeormetry = new THREE.TorusGeometry(planetsRadiusArray[i] * 1.25 + 5, 4.5, 2, 125, 6.3);
-                    var saturnOrbitTexture=new THREE.TextureLoader().load('Texture/saturn_ring.jpg');
+                    var saturnOrbitTexture = new THREE.TextureLoader().load('Texture/saturn_ring.jpg');
                     saturnMaterial = new THREE.MeshPhongMaterial({ map: saturnOrbitTexture });
                     saturnOrbit = new THREE.Mesh(saturnGeormetry, saturnMaterial);
                     saturnOrbit.position.x = planetsPositionXArray[i] + planetsRadiusArray[0];
@@ -113,12 +119,218 @@
 
                 }
 
-              }
+            }
 
             renderer = new THREE.WebGLRenderer();
             renderer.setPixelRatio(window.devicePixelRatio);
             renderer.setSize(window.innerWidth, window.innerHeight);
             document.body.appendChild(renderer.domElement);
+                                                                           //Camera control
+            document.addEventListener('keydown', planetSelect, false);
+
+        }
+
+        function planetSelect(event) {
+            if(event.keyCode>=48&&event.keyCode<=57)
+                resetSelect();
+
+            var selectedIndex =-1;
+            var key =event.keyCode;
+            switch(key)
+            {
+                case 48:
+                    selectedIndex = 0;
+                    break;
+
+                case 49:
+                    selectedIndex = 1;
+                    planetSwitch[0] = false;
+                    break;
+
+                case 50:
+                    selectedIndex = 2;
+                    planetSwitch[1] = false;
+                    break;
+
+                case 51:
+                    selectedIndex = 3;
+                    planetSwitch[2] = false;
+                    break;
+
+                case 52:
+                    selectedIndex = 4;
+                    planetSwitch[3] = false;
+                    break;
+
+                case 53:
+                     selectedIndex = 5;
+                     planetSwitch[4] = false;
+                     break;
+
+                case 54:
+                    selectedIndex = 6;
+                    planetSwitch[5] = false;
+                    break;
+
+                case 55:
+                     selectedIndex = 7;
+                     planetSwitch[6] = false;
+                     break;
+
+                case 56:
+                    selectedIndex = 8;
+                    planetSwitch[7] = false;
+                    break;
+
+                case 57:
+                    selectedIndex = 9;
+                    planetSwitch[8] = false;
+                    break;
+                                                                            //rotate camera
+                case 100:
+                    rotateCamera(3);
+                    break;
+
+                case 102:
+                    rotateCamera(2);
+                    break;
+
+                case 104:
+                    rotateCamera(0);
+                    break;
+
+                case 98:
+                    rotateCamera(1);
+                    break;
+
+                case 103:
+                    rotateCamera(5);
+                    break;
+
+                case 105:
+                    rotateCamera(4);
+                    break;
+                                                                        // Arrow keys
+                case 37:
+                case 38:
+                case 39:
+                case 40:
+                    break;
+                                                                            //move camera position
+                case 87:
+                    camera.position.z -= 10;
+                    break;
+
+                case 83:
+                    camera.position.z += 10;
+                    break;
+
+                case 65:
+                    camera.position.x -= 10;
+                    break;
+
+                case 68:
+                    camera.position.x += 10;
+                    break;
+
+                case 69:
+                    camera.position.y += 10;
+                    break;
+
+                case 81:
+                    camera.position.y -= 10;
+                    break;
+
+
+
+
+                default:
+                    selectedIndex = 10;
+            }
+
+              if(selectedIndex>=0&&selectedIndex<=9)
+             {
+                 cameraX = planets[selectedIndex].position.x;
+                 cameraY = planets[selectedIndex].position.y;
+                 cameraZ = planets[selectedIndex].position.z + planetsRadiusArray[selectedIndex] + 20;
+                 cameraRadius = planetsRadiusArray[selectedIndex] + 20;
+
+             }
+             if(selectedIndex==10)
+             {
+
+                 cameraX = 0;
+                 cameraY = 0;
+                 cameraZ = 600;
+                 resetSelect();
+                 displayOrbits();
+
+             }
+             cameraTrigger = true;
+            if(selectedIndex != -1)
+              setCameraPosition();
+
+            
+
+        }
+
+        function resetSelect()
+        {
+
+            for (var i = 0; i < planetSwitch.length;i++)
+            {
+
+                planetSwitch[i] = true;
+
+            }
+
+
+        }
+
+        function setCameraPosition()
+        {
+
+            camera.position.x = cameraX;
+            camera.position.y = cameraY;
+            camera.position.z = cameraZ;
+
+        }
+
+        function rotateCamera(i)
+        {
+
+            switch(i)
+            {
+                case 0:
+                    camera.rotation.x += cameraRotation[0];
+                    break;
+
+                case 1:
+                    camera.rotation.x -= cameraRotation[0];
+                    break;
+
+                case 2:
+                    camera.rotation.y += cameraRotation[1];
+                    break;
+
+                case 3:
+                    camera.rotation.y -= cameraRotation[1];
+                    break;
+
+                case 4:
+                    camera.rotation.z += cameraRotation[2];
+                    break;
+
+                case 5:
+                    camera.rotation.z -= cameraRotation[2];
+                    break;
+
+
+
+                default:
+                    alert("Error: couldn't rotate camera");
+            }
+
         }
 
         function animate() {
@@ -128,9 +340,24 @@
             for (let i = 1; i < planetsColorArray.length; i++)                      //Rotate the planets around the Sun(origin)
             {
 
-                rotateZ.makeRotationY(planetsSpeedArray[i-1]/6);
-                planets[i].position.applyMatrix4(rotateZ);
-                planets[i].rotation.y += 0.1;
+                rotateZ.makeRotationY(planetsSpeedArray[i - 1] / 6);
+                if (planetSwitch[i-1])
+                {
+                    planets[i].position.applyMatrix4(rotateZ);
+
+                }
+                else
+                {
+                    removeOrbits();
+                }
+                if (planetSwitch[i-1])
+                    daySpeed = 0.1;
+                else
+                {
+                    daySpeed = 0.01;
+                }
+                planets[i].rotation.y += daySpeed;
+
                 if (i == 6)
                 {
                     saturnOrbit.position.x = planets[i].position.x;
@@ -140,9 +367,30 @@
                     saturnOrbit.rotation.z += 0.1;
                 }
 
-            }      
-
+            }
+ 
             requestAnimationFrame(animate);
+
+        }
+
+        function removeOrbits()
+        {
+            for(var i=0;i<orbitsArray.length;i++)
+            {
+
+                scene.remove(orbitsArray[i]);
+
+            }
+        }
+
+        function displayOrbits()
+        {
+
+            for (var i = 0; i < orbitsArray.length; i++) {
+
+                scene.add(orbitsArray[i]);
+
+            }
 
         }
 
