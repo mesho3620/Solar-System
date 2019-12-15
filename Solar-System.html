@@ -43,9 +43,10 @@
         var saturnOrbit, saturnGeormetry, saturnMaterial;
         var cameraX = 0; cameraY = 0; cameraZ = 600;
         var cameraTrigger = false;
-        var cameraRotation = THREE.Matrix4();
-        var cameraRadius = 600;
-        var orbitsArray=[];
+        var cameraRotation = [0.1, 0.1, 0.1];
+        var cameraRadius = 600; 
+        var orbitsArray = [];
+        var daySpeed = 0.1;
 
         init();
         animate();
@@ -54,9 +55,8 @@
             scene = new THREE.Scene();
             camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 1500);
             camera.position.z = cameraZ;
-          //  setCameraPosition();
             var control = new THREE.OrbitControls(camera);
-            //Background
+                                                                                        //Background
             const loader = new THREE.TextureLoader();
             const bgTexture = loader.load('Texture/milkyway.jpg');
             scene.background = bgTexture;
@@ -131,74 +131,122 @@
         }
 
         function planetSelect(event) {
-            resetSelect();
-            var selectedIndex;
+            if(event.keyCode>=48&&event.keyCode<=57)
+                resetSelect();
 
-            if (event.keyCode == 48)
+            var selectedIndex =-1;
+            var key =event.keyCode;
+            switch(key)
             {
+                case 48:
+                    selectedIndex = 0;
+                    break;
 
-                selectedIndex = 0;
-            }
-            else if(event.keyCode == 49)
-            {
-                selectedIndex = 1;
-                planetSwitch[0] = false;
-            }
-            else if(event.keyCode == 50)
-            {
-                selectedIndex = 2;
-                planetSwitch[1] = false;
-            }
-            else if(event.keyCode == 51)
-            {
-                selectedIndex = 3;
-                planetSwitch[2] = false;
-            }
-            else if(event.keyCode == 52)
-            {
-                selectedIndex = 4;
-                planetSwitch[3] = false;
+                case 49:
+                    selectedIndex = 1;
+                    planetSwitch[0] = false;
+                    break;
 
-            }
-            else if(event.keyCode == 53)
-            {
-                selectedIndex = 5;
-                planetSwitch[4] = false;
+                case 50:
+                    selectedIndex = 2;
+                    planetSwitch[1] = false;
+                    break;
 
-            }
-            else if(event.keyCode == 54)
-            {
-                selectedIndex = 6;
-                planetSwitch[5] = false;
+                case 51:
+                    selectedIndex = 3;
+                    planetSwitch[2] = false;
+                    break;
 
-            }
-            else if(event.keyCode == 55)
-            {
-                selectedIndex = 7;
-                planetSwitch[6] = false;
+                case 52:
+                    selectedIndex = 4;
+                    planetSwitch[3] = false;
+                    break;
 
-            }
-            else if(event.keyCode == 56)
-            {
-                selectedIndex = 8;
-                planetSwitch[7] = false;
+                case 53:
+                     selectedIndex = 5;
+                     planetSwitch[4] = false;
+                     break;
 
-            }
-            else if(event.keyCode==57)
-            {
-                selectedIndex = 9;
-                planetSwitch[8] = false;
+                case 54:
+                    selectedIndex = 6;
+                    planetSwitch[5] = false;
+                    break;
 
-            }
-            else
-            {
-                selectedIndex = 10;
+                case 55:
+                     selectedIndex = 7;
+                     planetSwitch[6] = false;
+                     break;
 
-            }
-       //     if (event.keyCode != 37 && event.keyCode != 38 && event.keyCode != 39 && event.keyCode!= 40)
-       //     {
-          
+                case 56:
+                    selectedIndex = 8;
+                    planetSwitch[7] = false;
+                    break;
 
+                case 57:
+                    selectedIndex = 9;
+                    planetSwitch[8] = false;
+                    break;
+                                                                            //rotate camera
+                case 100:
+                    rotateCamera(3);
+                    break;
+
+                case 102:
+                    rotateCamera(2);
+                    break;
+
+                case 104:
+                    rotateCamera(0);
+                    break;
+
+                case 98:
+                    rotateCamera(1);
+                    break;
+
+                case 103:
+                    rotateCamera(5);
+                    break;
+
+                case 105:
+                    rotateCamera(4);
+                    break;
+                                                                        // Arrow keys
+                case 37:
+                case 38:
+                case 39:
+                case 40:
+                    break;
+                                                                            //move camera position
+                case 87:
+                    camera.position.z -= 10;
+                    break;
+
+                case 83:
+                    camera.position.z += 10;
+                    break;
+
+                case 65:
+                    camera.position.x -= 10;
+                    break;
+
+                case 68:
+                    camera.position.x += 10;
+                    break;
+
+                case 69:
+                    camera.position.y += 10;
+                    break;
+
+                case 81:
+                    camera.position.y -= 10;
+                    break;
+
+
+
+
+                default:
+                    selectedIndex = 10;
+            }
 
               if(selectedIndex>=0&&selectedIndex<=9)
              {
@@ -208,19 +256,23 @@
                  cameraRadius = planetsRadiusArray[selectedIndex] + 20;
 
              }
-             else
+             if(selectedIndex==10)
              {
 
                  cameraX = 0;
                  cameraY = 0;
                  cameraZ = 600;
+                 resetSelect();
                  displayOrbits();
 
              }
              cameraTrigger = true;
-            }
+            if(selectedIndex != -1)
+              setCameraPosition();
 
-        //}
+            
+
+        }
 
         function resetSelect()
         {
@@ -232,6 +284,7 @@
 
             }
 
+
         }
 
         function setCameraPosition()
@@ -240,6 +293,43 @@
             camera.position.x = cameraX;
             camera.position.y = cameraY;
             camera.position.z = cameraZ;
+
+        }
+
+        function rotateCamera(i)
+        {
+
+            switch(i)
+            {
+                case 0:
+                    camera.rotation.x += cameraRotation[0];
+                    break;
+
+                case 1:
+                    camera.rotation.x -= cameraRotation[0];
+                    break;
+
+                case 2:
+                    camera.rotation.y += cameraRotation[1];
+                    break;
+
+                case 3:
+                    camera.rotation.y -= cameraRotation[1];
+                    break;
+
+                case 4:
+                    camera.rotation.z += cameraRotation[2];
+                    break;
+
+                case 5:
+                    camera.rotation.z -= cameraRotation[2];
+                    break;
+
+
+
+                default:
+                    alert("Error: couldn't rotate camera");
+            }
 
         }
 
@@ -260,7 +350,14 @@
                 {
                     removeOrbits();
                 }
-                planets[i].rotation.y += 0.1;
+                if (planetSwitch[i-1])
+                    daySpeed = 0.1;
+                else
+                {
+                    daySpeed = 0.01;
+                }
+                planets[i].rotation.y += daySpeed;
+
                 if (i == 6)
                 {
                     saturnOrbit.position.x = planets[i].position.x;
@@ -271,12 +368,7 @@
                 }
 
             }
-            if (cameraTrigger)
-            {
-                setCameraPosition();
-                cameraTrigger = false;
-            }
-
+ 
             requestAnimationFrame(animate);
 
         }
